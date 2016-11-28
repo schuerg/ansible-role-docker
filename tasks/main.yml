@@ -1,2 +1,50 @@
 ---
-# tasks file for docker
+# This playbook is based on
+# https://docs.docker.com/engine/installation/linux/ubuntulinux/
+
+- name: Install Ubuntu prerequisites for Docker
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - linux-image-extra-{{ ansible_kernel }}
+    - linux-image-extra-virtual
+    - python-pip
+
+- name: Add the GPG key for the Docker apt repository
+  apt_key:
+    keyserver: hkp://ha.pool.sks-keyservers.net:80
+    id: 58118E89F3A912897C070ADBF76221572C52609D
+
+- name: Add the Docker apt repository
+  apt_repository:
+    repo: 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
+    state: present
+    filename: 'docker.list'
+
+- name: Install Docker Engine
+  apt:
+    name: docker-engine
+    state: latest
+    update_cache: yes
+    install_recommends: yes
+
+- name: Create docker group
+  group: name=docker state=present
+
+- name: Add user(s) to docker group
+  user:
+      name={{ item }}
+      state=present
+      group=docker
+  with_items: docker_users
+  when: docker_users is defined
+
+- name: Install docker-py
+  pip: name=docker-py state=latest
+
+- name: Start and enable Docker systemd service
+  systemd:
+    name: docker
+    state: started
+    enabled: True

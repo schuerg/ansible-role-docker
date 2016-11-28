@@ -1,2 +1,5 @@
 ---
 # defaults file for docker
+
+docker_group_users:
+  - simon
