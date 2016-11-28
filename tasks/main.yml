@@ -13,12 +13,12 @@
 
 - name: Add the GPG key for the Docker apt repository
   apt_key:
-    keyserver: hkp://ha.pool.sks-keyservers.net:80
-    id: 58118E89F3A912897C070ADBF76221572C52609D
+    keyserver: {{ docker_gpg_keyserver }}
+    id: {{ docker_gpg_key_id }}
 
 - name: Add the Docker apt repository
   apt_repository:
-    repo: 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
+    repo: {{ docker_apt_repo }}
     state: present
     filename: 'docker.list'
 
@@ -37,8 +37,8 @@
       name={{ item }}
       state=present
       group=docker
-  with_items: docker_users
-  when: docker_users is defined
+  with_items: docker_group_users
+  when: docker_group_users is defined
 
 - name: Install docker-py
   pip: name=docker-py state=latest
