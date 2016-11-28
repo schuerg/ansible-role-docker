@@ -3,6 +3,8 @@ Ansible Role: Docker
 
 Installs Docker on Debian/Ubuntu Linux systems.
 
+This role is also published on [Ansible Galaxy](https://galaxy.ansible.com/schuerg/docker/).
+
 Requirements
 ------------
 
