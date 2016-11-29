@@ -13,12 +13,12 @@
 
 - name: Add the GPG key for the Docker apt repository
   apt_key:
-    keyserver: {{ docker_gpg_keyserver }}
-    id: {{ docker_gpg_key_id }}
+    keyserver: "{{ docker_gpg_keyserver }}"
+    id: "{{ docker_gpg_key_id }}"
 
 - name: Add the Docker apt repository
   apt_repository:
-    repo: {{ docker_apt_repo }}
+    repo: "{{ docker_apt_repo }}"
     state: present
     filename: 'docker.list'
 
@@ -34,7 +34,7 @@
 
 - name: Add user(s) to docker group
   user:
-      name={{ item }}
+      name="{{ item }}"
       state=present
       group=docker
   with_items: docker_group_users
